@@ -1,0 +1,7 @@
+---
+# handlers file for ansible-cassandra
+- name: reload cassandra service
+  systemd:
+    name: "{{ cassandra_service_name }}"
+    state: restarted
+    enabled: yes

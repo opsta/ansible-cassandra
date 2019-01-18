@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - opsta.cassandra
+#   environment: "{{ proxy_env | default({}) }}"

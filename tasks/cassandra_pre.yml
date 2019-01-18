@@ -1,0 +1,10 @@
+- name: Install apt-key for Apache Cassandra
+  apt_key:
+    url: "{{ apt_key_url }}"
+    state: present
+
+- name: Add apt-repository
+  apt_repository:
+    repo: "{{ apt_repository }}" 
+    state: present
+    filename: apache-cassandra
