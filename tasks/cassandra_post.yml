@@ -26,20 +26,24 @@
   when: cassandra_init_config_reg is changed
   tags: cassandra-config
 
-- name: Start Cassandra Seed service
+- name: Start Cassandra service
   systemd:
     name: "{{ cassandra_service_name }}"
     state: restarted
     enabled: yes
+  when: cassandra_init_config_reg is changed
   tags: cassandra-config
 
 - block: # State of Cluster
-  - name: Wait for start seed cluster service
-    pause:
-      minutes: 1
+  - name: Wait for Cassandra service is started
+    wait_for:
+      host: "{{ ansible_default_ipv4.address }}"
+      port: 7000
+      delay: 10
   - name: Check node status
     shell: nodetool status
     register: nodestat_reg
-  - debug: 
+  - name: Node status
+    debug: 
      msg: "{{ nodestat_reg.stdout.split('\n') }}"
   tags: cassandra-config
