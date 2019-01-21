@@ -1,11 +1,9 @@
 - name: Copy Casssandra configuration file
   template:
-    src: "{{ cassandra_host_config_file_path }}"
+    src: cassandra.yaml.j2
     dest: "{{ cassandra_config_file_path }}"
     backup: yes
   register: cassandra_init_config_reg
-  when: cassandra_config_check_reg.stat.exists
-#   notify: reload cassandra service
   tags: cassandra-config
 
 - block: # Clean up system configuration
@@ -14,7 +12,7 @@
       name: cassandra
       state: stopped
   - find:
-      path: "{{ cassandra_system_data_path }}"
+      path: "{{ cassandra_home }}/data/system"
       file_type: directory
     register: system_directories_reg
   - name: Cleanup old configuration and data of Cassandra
@@ -39,7 +37,7 @@
     wait_for:
       host: "{{ ansible_default_ipv4.address }}"
       port: 7000
-      delay: 10
+      delay: 40
   - name: Check node status
     shell: nodetool status
     register: nodestat_reg
