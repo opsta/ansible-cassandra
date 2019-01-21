@@ -3,4 +3,4 @@ apt_key_url: https://www.apache.org/dist/cassandra/KEYS
 
 cassandra_packages: cassandra
 cassandra_service_name: cassandra
-cassandra_system_data_path: /var/lib/cassandra/data/system/
+cassandra_home: /var/lib/cassandra
