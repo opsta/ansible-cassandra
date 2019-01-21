@@ -12,13 +12,11 @@ Role Variables
 --------------
 
 ```yml
-cassandra_search_config_path: "{{ playbook_dir }}/files/groups/{{ item }}/cassandra"
-cassandra_search_config_paths: []
-
-cassandra_host_config_file_path: "{{ cassandra_host_config_path | default(inventory_hostname) }}/cassandra.yaml.j2"
-cassandra_config_file_path: /etc/cassandra/cassandra.yaml
-cassandra_config_path: /etc/cassandra
-
+---
+cassandra_cluster_name: MyCluster
+cassandra_rpc_address: 0.0.0.0
+cassandra_num_token: 256
+cassandra_endpoint_snitch: SimpleSnitch
 ```
 example of inventory file
 ```ini
