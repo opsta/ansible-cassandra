@@ -9,9 +9,6 @@ cassandra_config_path: /etc/cassandra
 
 # use in config
 cassandra_cluster_name: MyCluster
-cassandra_seeds: 127.0.0.1
-# if cassandra_seeds has more than one it should seperate via command 
-# ex. cassandra_seeds: 10.0.0.1,10.20.2.1
 cassandra_rpc_address: 0.0.0.0
 cassandra_num_token: 256
 cassandra_endpoint_snitch: SimpleSnitch
