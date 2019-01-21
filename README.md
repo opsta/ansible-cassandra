@@ -12,7 +12,6 @@ Role Variables
 --------------
 
 ```yml
----
 cassandra_cluster_name: MyCluster
 cassandra_rpc_address: 0.0.0.0
 cassandra_num_token: 256
