@@ -20,7 +20,7 @@ cassandra_config_file_path: /etc/cassandra/cassandra.yaml
 cassandra_config_path: /etc/cassandra
 
 ```
-example of inventory files
+example of inventory file
 ```ini
 cassandra1 ansible_host=xx.xx.xx.xx ansible_user=ubuntu
 cassandra2 ansible_host=yy.yy.yy.yy ansible_user=ubuntu
