@@ -46,6 +46,7 @@ Example Playbook
     If you had more than one seed. You need to run gather_facts all hosts
 before start the following playbook. Example run install a new version of java
 for cassandra and gather facts for all hosts.
+
 ```yml
 ---
 - hosts: all
