@@ -4,5 +4,6 @@ galaxy_info:
   company: "Opsta (Thailand) Co.,Ltd."
   license: MIT
   min_ansible_version: 2.4
-  galaxy_tags: ['cassandra-config']
+  galaxy_tags:
+    - cassandra-config
 dependencies: []
