@@ -37,7 +37,10 @@
     wait_for:
       host: "{{ ansible_default_ipv4.address }}"
       port: 7000
-      delay: 40
+      delay: 30
+  - name: Prepare nodetool for run status
+    pause:
+      seconds: 10
   - name: Check node status
     shell: nodetool status
     register: nodestat_reg
