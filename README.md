@@ -23,15 +23,6 @@ cassandra_data_file_directories:
 cassandra_commitlog_directory: /var/lib/cassandra/commitlog
 cassandra_saved_caches_directory: /var/lib/cassandra/saved_caches
 cassandra_hints_directory: /var/lib/cassandra/hints
-cassandra_server_encryption_options:
-  keystore_password: CHANGEME
-  truststore_password: CHANGEME
-cassandra_client_encryption_options:
-  keystore_password: CHANGEME
-cassandra_transparent_data_encryption_options:
-  key_provider:
-    keystore_password: CHANGEME
-    key_password: CHANGEME
 ```
 Example of inventory file
 ```ini
