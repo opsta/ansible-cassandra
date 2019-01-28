@@ -16,6 +16,22 @@ cassandra_cluster_name: MyCluster
 cassandra_rpc_address: 0.0.0.0
 cassandra_num_token: 256
 cassandra_endpoint_snitch: SimpleSnitch
+cassandra_authenticator: AllowAllAuthenticator
+cassandra_authorizer: AllowAllAuthorizer
+cassandra_data_file_directories:
+  - /var/lib/cassandra/data
+cassandra_commitlog_directory: /var/lib/cassandra/commitlog
+cassandra_saved_caches_directory: /var/lib/cassandra/saved_caches
+cassandra_hints_directory: /var/lib/cassandra/hints
+cassandra_server_encryption_options:
+  keystore_password: CHANGEME
+  truststore_password: CHANGEME
+cassandra_client_encryption_options:
+  keystore_password: CHANGEME
+cassandra_transparent_data_encryption_options:
+  key_provider:
+    keystore_password: CHANGEME
+    key_password: CHANGEME
 ```
 Example of inventory file
 ```ini
@@ -26,13 +42,13 @@ cassandra3 ansible_host=zz.zz.zz.zz ansible_user=ubuntu
 [cassandra-seeds]
 cassandra1
 
-[cassandra-clients]
+[cassandra-nodes]
 cassandra2
 cassandra3
 
 [cassandra-cluster:children]
 cassandra-seeds
-cassandra-clients
+cassandra-nodes
 ```
 
 Dependencies
@@ -64,7 +80,7 @@ for cassandra and gather facts for all hosts.
     - opsta.cassandra
   environment: "{{ proxy_env | default({}) }}"
 
-- hosts: cassandra-clients
+- hosts: cassandra-nodes
   become: true
   gather_facts: true
   serial: 1
