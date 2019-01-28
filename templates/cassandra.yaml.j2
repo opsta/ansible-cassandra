@@ -1215,31 +1215,11 @@ request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 # http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore
 #
 server_encryption_options:
-{% if cassandra_server_encryption_options.internode_encryption is defined %}
-    internode_encryption: {{ cassandra_server_encryption_options.internode_encryption }}
-{% else %}
     internode_encryption: none
-{% endif %}
-{% if cassandra_server_encryption_options.keystore is defined %}
-    keystore: {{ cassandra_server_encryption_options.keystore }}
-{% else %}
     keystore: conf/.keystore
-{% endif %}
-{% if cassandra_server_encryption_options.keystore_password is defined %}
-    keystore_password: {{ cassandra_server_encryption_options.keystore_password }}
-{% else %}
     keystore_password: cassandra
-{% endif %}
-{% if cassandra_server_encryption_options.truststore is defined %}
-    truststore: {{ cassandra_server_encryption_options.truststore }}
-{% else %}
     truststore: conf/.truststore
-{% endif %}
-{% if cassandra_server_encryption_options.truststore_password is defined %}
-    truststore_password: {{ cassandra_server_encryption_options.truststore_password }}
-{% else %}
     truststore_password: cassandra
-{% endif %}
     # More advanced defaults below:
     # protocol: TLS
     # algorithm: SunX509
@@ -1250,27 +1230,11 @@ server_encryption_options:
 
 # enable or disable client/server encryption.
 client_encryption_options:
-{% if cassandra_client_encryption_options.enabled is defined %}
-    enabled: {{ cassandra_client_encryption_options.enabled }}
-{% else %}
     enabled: false
-{% endif %}
     # If enabled and optional is set to true encrypted and unencrypted connections are handled.
-{% if cassandra_client_encryption_options.optional is defined %}
-    optional: {[ cassandra_client_encryption_options.optional }}
-{% else %}
     optional: false
-{% endif %}
-{% if cassandra_client_encryption_options.keystore is defined %}
-    keystore: {{ cassandra_client_encryption_options.keystore }}
-{% else %}
     keystore: conf/.keystore
-{% endif %}
-{% if cassandra_client_encryption_options.keystore_password %}
-    keystore_password: {{ cassandra_client_encryption_options.keystore_password }}
-{% else %}
     keystore_password: cassandra
-{% endif %}
     # require_client_auth: false
     # Set trustore and truststore_password if require_client_auth is true
     # truststore: conf/.truststore
@@ -1357,53 +1321,12 @@ windows_timer_interval: 1
 # Currently, only the following file types are supported for transparent data encryption, although
 # more are coming in future cassandra releases: commitlog, hints
 transparent_data_encryption_options:
-{% if cassandra_transparent_data_encryption_options.enabled is defined %}
-    enabled: {{ cassandra_transparent_data_encryption_options.enabled }}
-{% else %}
     enabled: false
-{% endif %}
-{% if cassandra_transparent_data_encryption_options.chunk_length_kb is defined %}
-    chunk_length_kb: {{ cassandra_transparent_data_encryption_options.chunk_length_kb }}
-{% else %}
     chunk_length_kb: 64
-{% endif %}
-{% if cassandra_transparent_data_encryption_options.cipher is defined %}
-    cipher: {{ cassandra_transparent_data_encryption_options.cipher }}
-{% else %}
     cipher: AES/CBC/PKCS5Padding
-{% endif %}
-{% if cassandra_transparent_data_encryption_options.key_alias is defined %}
-    key_alias: {{ cassandra_transparent_data_encryption_options.key_alias }}
-{% else %}
     key_alias: testing:1
-{% endif %}
     # CBC IV length for AES needs to be 16 bytes (which is also the default size)
     # iv_length: 16
-{% if cassandra_transparent_data_encryption_options.key_provider is defined %}
-    key_provider: 
-      - class_name: org.apache.cassandra.security.JKSKeyProvider
-        parameters: 
-{% if cassandra_transparent_data_encryption_options.key_provider.keystore is defined %}
-          - keystore: {{ cassandra_transparent_data_encryption_options.key_provider.keystore }}
-{% else %}
-          - keystore: conf/.keystore
-{% endif %}
-{% if cassandra_transparent_data_encryption_options.key_provider.keystore_password is defined %}
-            keystore_password: {{ cassandra_transparent_data_encryption_options.key_provider.keystore_password }}
-{% else %}
-            keystore_password: cassandra
-{% endif %}
-{% if cassandra_transparent_data_encryption_options.key_provider.store_type is defined %}
-            store_type: {{ cassandra_transparent_data_encryption_options.key_provider.store_type }}
-{% else %}
-            store_type: JCEKS
-{% endif %}
-{% if cassandra_transparent_data_encryption_options.key_provider.key_password is defined %}
-            key_password: {{ cassandra_transparent_data_encryption_options.key_provider.key_password }}
-{% else %}
-            key_password: cassandra
-{% endif %}
-{% else %}
     key_provider: 
       - class_name: org.apache.cassandra.security.JKSKeyProvider
         parameters: 
@@ -1411,7 +1334,6 @@ transparent_data_encryption_options:
             keystore_password: cassandra
             store_type: JCEKS
             key_password: cassandra
-{% endif %}
 
 #####################
 # SAFETY THRESHOLDS #
