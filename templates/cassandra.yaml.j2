@@ -27,8 +27,8 @@ cluster_name: MyCluster
 #
 # If you already have a cluster with 1 token per node, and wish to migrate to 
 # multiple tokens per node, see http://wiki.apache.org/cassandra/Operations
-{% if cassandra_num_token is defined %}
-num_tokens: {{ cassandra_num_token }}
+{% if cassandra_num_tokens is defined %}
+num_tokens: {{ cassandra_num_tokens }}
 {% else %}
 num_tokens: 256
 {% endif %}
@@ -259,7 +259,11 @@ credentials_update_interval_in_ms: {{ cassandra_credentials_update_interval_in_m
 # compatibility include RandomPartitioner, ByteOrderedPartitioner, and
 # OrderPreservingPartitioner.
 #
+{% if cassandra_partitioner is defined %}
+partitioner: {{ cassandra_partitioner }}
+{% else %}
 partitioner: org.apache.cassandra.dht.Murmur3Partitioner
+{% endif %}
 
 # Directories where Cassandra should store data on disk.  Cassandra
 # will spread data evenly across them, subject to the granularity of
@@ -474,8 +478,16 @@ saved_caches_directory: {{ cassandra_saved_caches_directory }}
 # the other option is "periodic" where writes may be acked immediately
 # and the CommitLog is simply synced every commitlog_sync_period_in_ms
 # milliseconds. 
+{% if cassandra_commitlog_sync is defined %}
+commitlog_sync: {{ cassandra_commitlog_sync }}
+{% else %}
 commitlog_sync: periodic
+{% endif %}
+{% if cassandra_commitlog_sync_period_in_ms is defined %}
+commitlog_sync_period_in_ms: {{ cassandra_commitlog_sync_period_in_ms }}
+{% else %}
 commitlog_sync_period_in_ms: 10000
+{% endif %}
 
 # The size of the individual commitlog file segments.  A commitlog
 # segment may be archived, deleted, or recycled once all the data
@@ -810,7 +822,11 @@ rpc_address: {{ cassandra_rpc_address }}
 # rpc_interface_prefer_ipv6: false
 
 # port for Thrift to listen for clients on
+{% if cassandra_rpc_port is defined %}
+rpc_port: {{ cassandra_rpc_port }}
+{% else %}
 rpc_port: 9160
+{% endif %}
 
 # RPC address to broadcast to drivers and other Cassandra nodes. This cannot
 # be set to 0.0.0.0. If left blank, this will be set to the value of
@@ -1166,7 +1182,11 @@ dynamic_snitch_badness_threshold: 0.1
 # client requests to a node with a separate queue for each
 # request_scheduler_id. The scheduler is further customized by
 # request_scheduler_options as described below.
+{% if cassandra_request_scheduler is defined %}
+request_scheduler: {{ cassandra_request_scheduler }}
+{% else %}
 request_scheduler: org.apache.cassandra.scheduler.NoScheduler
+{% endif %}
 
 # Scheduler Options vary based on the type of scheduler
 # NoScheduler - Has no options

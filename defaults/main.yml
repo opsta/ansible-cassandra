@@ -3,9 +3,11 @@
 cassandra_config_file_path: /etc/cassandra/cassandra.yaml
 
 # use in config
+# you can modify value of template via
+# cassandra_{variable_name}: value
 cassandra_cluster_name: MyCluster
 cassandra_rpc_address: 0.0.0.0
-cassandra_num_token: 256
+cassandra_num_tokens: 256
 cassandra_endpoint_snitch: SimpleSnitch
 cassandra_authenticator: AllowAllAuthenticator
 cassandra_authorizer: AllowAllAuthorizer
