@@ -9,7 +9,7 @@ cassandra_rack: rack1
 
 #### use in cassandra.yaml
 # cassandra_<var_name>
-# It should be change for you cluster
+# It should be change for your cluster
 cassandra_cluster_name: MyCluster
 cassandra_rpc_address: 0.0.0.0
 # rpc_address is for client connection
