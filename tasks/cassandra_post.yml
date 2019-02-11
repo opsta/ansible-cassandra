@@ -1,4 +1,4 @@
-- name: Create Cassandra data_file_directories
+- name: Prepare directories for Cassandra
   file:
     path: "{{ item }}"
     state: directory
@@ -6,7 +6,10 @@
     owner: cassandra
     group: cassandra
   with_items:
+    - "{{ cassandra_hints_directory }}"
     - "{{ cassandra_data_file_directories }}"
+    - "{{ cassandra_commitlog_directory }}"
+    - "{{ cassandra_saved_caches_directory }}"
   tags: cassandra-config
 
 - name: Copy cassandra-rackdc.properties file
@@ -38,10 +41,10 @@
       state: stopped
   - name: Cleanup system configuration schemas of Cassandra
     file:
-      path: "{{ item.path }}"
+      path: "{{ item }}/system"
       state: absent
     with_items:
-      - "{{ system_directories_reg.results[0].files }}"
+      - "{{ cassandra_data_file_directories }}"
   - name: Cleanup commitlog configuration of Cassandra
     file:
       path: "{{ cassandra_commitlog_directory }}"
