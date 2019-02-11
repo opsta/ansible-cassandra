@@ -1,29 +1,34 @@
 ---
-# defaults file for ansible-cassandra
+# Defaults file for ansible-cassandra
 cassandra_rackdc_config_file_path: /etc/cassandra/cassandra-rackdc.properties
 cassandra_config_file_path: /etc/cassandra/cassandra.yaml
 
-#### use in cassandra-rackdc.properties
+#### Use in cassandra-rackdc.properties
 cassandra_dc: dc1
 cassandra_rack: rack1
 
-#### use in cassandra.yaml
-## cassandra_<var_name>
-## It should be change for your cluster
+#### Use in cassandra.yaml
+# It should be change for your cluster
 cassandra_cluster_name: MyCluster
-# rpc_address is for client connection
+
+# rpc_address is an IP address for client connection
 cassandra_rpc_address: 0.0.0.0
 cassandra_num_tokens: 256
-# cassandra_endpoint_snitch valid values: IEndpointSnitch, SimpleSnitch, 
-#   GossipingPropertyFileSnitch, PropertyFileSnitch, Ec2Snitch, 
-#   Ec2MultiRegionSnitch, RackInferringSnitch
+
+# Choose you endpoint_snitch for Cassandra via following options.
+#   IEndpointSnitch, SimpleSnitch, GossipingPropertyFileSnitch, 
+#   PropertyFileSnitch, Ec2Snitch, Ec2MultiRegionSnitch, RackInferringSnitch
 cassandra_endpoint_snitch: GossipingPropertyFileSnitch
-# cassandra_authenticator valid values: AllowAllAuthenticator, PasswordAuthenticator
+
+# Authenticator select from AllowAllAuthenticator, PasswordAuthenticator.
+# If you use PasswordAuthenticator, Change authenticator to CassandraAuthorizer
 cassandra_authenticator: PasswordAuthenticator
-# cassandra_authorizer valid values: AllowAllAuthorizer, CassandraAuthorizer
+
+# Authorizer can be one of AllowAllAuthorizer, CassandraAuthorizer
 cassandra_authorizer: CassandraAuthorizer
 cassandra_hints_directory: /var/lib/cassandra/hints
-# if cassandra has more than one data directories
+
+# If cassandra has more than one data directories
 # cassadnra_data_file_directories:
 #   - /var/lib/cassandra/data1
 #   - /var/lib/cassandra/data2
@@ -34,7 +39,7 @@ cassandra_commitlog_directory: /var/lib/cassandra/data/commitlog
 cassandra_saved_caches_directory: /var/lib/cassandra/data/saved_caches
 
 #### Optional
-## token & permission/credential sync
+# Token & Permission/credential sync
 cassandra_allocate_tokens_for_keyspace: null
 cassandra_initial_token: null
 cassandra_hinted_handoff_enabled: true
@@ -52,9 +57,9 @@ cassandra_credentials_validity_in_ms: 2000
 cassandra_credentials_update_interval_in_ms: 2000
 
 ## failure policy
-# cassandra_disk_failuer_policy valid values: die, stop, stop_commit ignore
+# A disk failure policy (die, stop, stop_commit ignore)
 cassandra_disk_failure_policy: stop
-# cassandra_commit_failure_policy valid values: die, stop, ignore 
+# A commit failure policy (die, stop, ignore)
 cassandra_commit_failure_policy: stop
 
 ## cache configuration
@@ -69,13 +74,13 @@ cassandra_counter_cache_size_in_mb: null
 cassandra_counter_cache_save_period: 7200
 cassandra_counter_cache_keys_to_save: 100
 
-## commitlog configuration
-# commitlog_sync: periodic, batch
+## Commitlog configuration
+# A commitlog sync for Cassandra option (periodic, batch)
 cassandra_commitlog_sync: periodic
 cassandra_commitlog_sync_period_in_ms: 10000
 cassandra_commitlog_segment_size_in_mb: 32
 
-## concurrence configuration
+## Concurrence configuration
 cassandra_concurrent_reads: 32
 cassandra_concurrent_writes: 32
 cassandra_concurrent_counter_writes: 32
@@ -85,8 +90,9 @@ cassandra_buffer_pool_use_heap_if_exhausted: true
 cassandra_memtable_heap_space_in_mb: 2048
 cassandra_memtable_offheap_space_in_mb: 2048
 cassandra_memtable_cleanup_threshold: 0.11
-# cassandra_memtable_allocation_type valid values: heap_buffers, 
-#   offheap_buffers, offheap_objects
+
+# Specify the way Cassandra allocate and manages memtable memory
+# Option: (heap_buffers, offheap_buffers, offheap_objects)
 cassandra_memtable_allocation_type: heap_buffers
 cassandra_commitlog_total_space_in_mb: 8192
 cassandra_memtable_flush_writers: 1
@@ -95,7 +101,7 @@ cassandra_index_summary_resize_interval_in_minutes: 60
 cassandra_trickle_fsync: false
 cassandra_trickle_fsync_interval_in_kb: 10240
 
-## backup and io configuration
+## Backup and I/O configuration
 cassandra_thrift_framed_transport_size_in_mb: 15
 cassandra_incremental_backups: false
 cassandra_snapshot_before_compaction: false
@@ -113,7 +119,7 @@ cassandra_counter_write_request_timeout_in_ms: 5000
 cassandra_cas_contention_timeout_in_ms: 1000
 cassandra_truncate_request_timeout_in_ms: 60000
 
-## communication of cassandra
+## Communication of Cassandra
 cassandra_storage_port: 7000
 cassandra_ssl_storage_port: 7001
 cassandra_start_native_transport: true
@@ -121,14 +127,16 @@ cassandra_native_transport_port: 9042
 cassandra_start_rpc: false
 cassandra_rpc_port: 9160
 cassandra_rpc_keepalive: true
-# cassandra_rpc_server_type valid values: sync, hsha
+
+# Choose a rpc server type of cassandra (valid values: sync, hsha)
 cassandra_rpc_server_type: sync
 cassandra_request_timeout_in_ms: 10000
 cassandra_cross_node_timeout: false
 cassandra_dynamic_snitch_update_interval_in_ms: 100
 cassandra_dynamic_snitch_reset_interval_in_ms: 600000
 cassandra_dynamic_snitch_badness_threshold: 0.1
-# cassandra_internode_compression valid values: all, dc, none
+
+# Choose a internode compression (all, dc, none)
 cassandra_internode_compression: dc
 cassandra_inter_dc_tcp_nodelay: false
 cassandra_tracetype_query_ttl: 86400
