@@ -12,6 +12,8 @@ cassandra_rack: rack1
 # It should be change for you cluster
 cassandra_cluster_name: MyCluster
 cassandra_num_tokens: 256
+cassandra_rpc_address: 0.0.0.0
+# rpc_address is for client connection
 cassandra_endpoint_snitch: GossipingPropertyFileSnitch
 cassandra_authenticator: PasswordAuthenticator
 cassandra_authorizer: CassandraAuthorizer
@@ -85,17 +87,6 @@ cassandra_index_summary_resize_interval_in_minutes: 60
 cassandra_trickle_fsync: false
 cassandra_trickle_fsync_interval_in_kb: 10240
 
-# ip address & ports
-cassandra_storage_port: 7000
-cassandra_ssl_storage_port: 7001
-cassandra_start_native_transport: true
-cassandra_native_transport_port: 9042
-cassandra_start_rpc: false
-cassandra_rpc_address: 0.0.0.0
-cassandra_rpc_port: 9160
-cassandra_rpc_keepalive: true
-cassandra_rpc_server_type: sync
-
 # backup and io configuration
 cassandra_thrift_framed_transport_size_in_mb: 15
 cassandra_incremental_backups: false
@@ -115,6 +106,14 @@ cassandra_cas_contention_timeout_in_ms: 1000
 cassandra_truncate_request_timeout_in_ms: 60000
 
 # communication of cassandra
+cassandra_storage_port: 7000
+cassandra_ssl_storage_port: 7001
+cassandra_start_native_transport: true
+cassandra_native_transport_port: 9042
+cassandra_start_rpc: false
+cassandra_rpc_port: 9160
+cassandra_rpc_keepalive: true
+cassandra_rpc_server_type: sync
 cassandra_request_timeout_in_ms: 10000
 cassandra_cross_node_timeout: false
 cassandra_dynamic_snitch_update_interval_in_ms: 100
