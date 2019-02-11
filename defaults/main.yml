@@ -11,9 +11,9 @@ cassandra_rack: rack1
 # cassandra_<var_name>
 # It should be change for you cluster
 cassandra_cluster_name: MyCluster
-cassandra_num_tokens: 256
 cassandra_rpc_address: 0.0.0.0
 # rpc_address is for client connection
+cassandra_num_tokens: 256
 cassandra_endpoint_snitch: GossipingPropertyFileSnitch
 cassandra_authenticator: PasswordAuthenticator
 cassandra_authorizer: CassandraAuthorizer
