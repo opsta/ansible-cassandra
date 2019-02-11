@@ -26,7 +26,8 @@
   tags: cassandra-config
 
 - block: # Clean up system configuration
-  - find:
+  - name: Check for system is initialed
+    find:
       path: "{{ item }}/system"
       file_type: directory
     with_items:
@@ -37,7 +38,7 @@
     when: system_directories_reg.results[0].files != []
   - name: Stop cassandra for Reload configuration
     systemd:
-      name: cassandra
+      name: "{{ cassandra_service_name }}"
       state: stopped
   - name: Cleanup system configuration schemas of Cassandra
     file:
