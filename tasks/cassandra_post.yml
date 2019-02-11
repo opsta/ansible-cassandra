@@ -26,7 +26,7 @@
   tags: cassandra-config
 
 - block: # Clean up system configuration
-  - name: Check for system is initialed
+  - name: Check for Cassandra is initialed
     find:
       path: "{{ item }}/system"
       file_type: directory
