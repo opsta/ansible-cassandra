@@ -1,4 +1,4 @@
-- name: Create Cassandra data_file_directories
+- name: Prepare directories for Cassandra
   file:
     path: "{{ item }}"
     state: directory
@@ -6,35 +6,56 @@
     owner: cassandra
     group: cassandra
   with_items:
+    - "{{ cassandra_hints_directory }}"
     - "{{ cassandra_data_file_directories }}"
+    - "{{ cassandra_commitlog_directory }}"
+    - "{{ cassandra_saved_caches_directory }}"
   tags: cassandra-config
 
-- name: Copy Casssandra configuration file
+- name: Copy cassandra-rackdc.properties file
+  template: 
+    src: cassandra-rackdc.properties.j2
+    dest: "{{ cassandra_rackdc_config_file_path }}"
+  register: cassandra_rackdc_init_config_reg
+  tags: cassandra-config
+- name: Copy cassandra.yaml file
   template:
     src: cassandra.yaml.j2
     dest: "{{ cassandra_config_file_path }}"
-    backup: yes
   register: cassandra_init_config_reg
   tags: cassandra-config
 
 - block: # Clean up system configuration
-  - name: Stop cassandra for Reload configuration
-    systemd:
-      name: cassandra
-      state: stopped
-  - find:
+  - name: Check for Cassandra is initialed
+    find:
       path: "{{ item }}/system"
       file_type: directory
     with_items:
       - "{{ cassandra_data_file_directories }}"
     register: system_directories_reg
-  - name: Cleanup old configuration and data of Cassandra
+  - name: Unjoin Node before reconfiguration
+    shell: nodetool decommission
+    when: system_directories_reg.results[0].files != []
+  - name: Stop cassandra for Reload configuration
+    systemd:
+      name: "{{ cassandra_service_name }}"
+      state: stopped
+  - name: Cleanup system configuration schemas of Cassandra
     file:
-      path: "{{ item.path }}"
+      path: "{{ item }}/system"
       state: absent
     with_items:
-      - "{{ system_directories_reg.results[0].files }}"
-  when: cassandra_init_config_reg is changed
+      - "{{ cassandra_data_file_directories }}"
+  - name: Cleanup commitlog configuration of Cassandra
+    file:
+      path: "{{ cassandra_commitlog_directory }}"
+      state: absent
+  - name: Cleanup caches configuration of Cassandra
+    file:
+      path: "{{ cassandra_saved_caches_directory }}"
+      state: absent
+  when: cassandra_rackdc_init_config_reg is changed or
+        cassandra_init_config_reg is changed
   tags: cassandra-config
 
 - name: Start Cassandra service
@@ -42,7 +63,8 @@
     name: "{{ cassandra_service_name }}"
     state: restarted
     enabled: yes
-  when: cassandra_init_config_reg is changed
+  when: cassandra_rackdc_init_config_reg is changed or 
+        cassandra_init_config_reg is changed
   tags: cassandra-config
 
 - block: # State of Cluster
