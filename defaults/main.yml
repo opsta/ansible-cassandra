@@ -29,7 +29,7 @@ cassandra_commitlog_directory: /var/lib/cassandra/data/commitlog
 cassandra_saved_caches_directory: /var/lib/cassandra/data/saved_caches
 
 #### Optional
-# token
+# token & permission/credential sync
 cassandra_allocate_tokens_for_keyspace: null
 cassandra_initial_token: null
 cassandra_hinted_handoff_enabled: true
@@ -39,8 +39,6 @@ cassandra_max_hints_delivery_threads: 2
 cassandra_hints_flush_period_in_ms: 10000
 cassandra_max_hints_file_size_in_mb: 128
 cassandra_batchlog_replay_throttle_in_kb: 1024
-
-# authentication
 cassandra_roles_validity_in_ms: 2000
 cassandra_roles_update_interval_in_ms: 2000
 cassandra_permissions_validity_in_ms: 2000
@@ -51,10 +49,10 @@ cassandra_credentials_update_interval_in_ms: 2000
 # failure policy
 cassandra_disk_failure_policy: stop
 cassandra_commit_failure_policy: stop
-cassandra_prepared_statements_cache_size_mb: null
-cassandra_thrift_prepared_statements_cache_size_mb: null
 
 # cache configuration
+cassandra_prepared_statements_cache_size_mb: null
+cassandra_thrift_prepared_statements_cache_size_mb: null
 cassandra_key_cache_size_in_mb: null
 cassandra_key_cache_save_period: 14400
 cassandra_row_cache_size_in_mb: 0
