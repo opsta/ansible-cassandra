@@ -32,7 +32,7 @@
     with_items:
       - "{{ cassandra_data_file_directories }}"
     register: system_directories_reg
-  - name: Un-join Node before reconfiguration
+  - name: Unjoin Node before reconfiguration
     shell: nodetool decommission
     when: system_directories_reg.results[0].files != []
   - name: Stop cassandra for Reload configuration
