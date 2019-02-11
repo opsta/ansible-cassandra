@@ -23,10 +23,6 @@
   tags: cassandra-config
 
 - block: # Clean up system configuration
-#   - name: Stop cassandra for Reload configuration
-#     systemd:
-#       name: cassandra
-#       state: stopped
   - find:
       path: "{{ item }}/system"
       file_type: directory
