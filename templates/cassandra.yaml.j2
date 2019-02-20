@@ -913,14 +913,14 @@ dynamic_snitch_badness_threshold: {{ cassandra_dynamic_snitch_badness_threshold 
 # request_scheduler_options as described below.
 request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 
-# scheduler options vary based on the type of scheduler
-# noscheduler - has no options
-# roundrobin
-#  - throttle_limit -- the throttle_limit is the number of in-flight
-#                      requests per client.  requests beyond
+# Scheduler options vary based on the type of scheduler
+# Noscheduler - has no options
+# Roundrobin
+#  - throttle_limit -- The throttle_limit is the number of in-flight
+#                      requests per client.  Requests beyond
 #                      that limit are queued up until
 #                      running requests can complete.
-#                      the value of 80 here is twice the number of
+#                      The value of 80 here is twice the number of
 #                      concurrent_reads + concurrent_writes.
 #  - default_weight -- default_weight is optional and allows for
 #                      overriding the default which is 1.
