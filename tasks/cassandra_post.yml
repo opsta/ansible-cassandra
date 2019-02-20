@@ -4,6 +4,8 @@
     dest: "{{ cassandra_config_base_path }}"
     mode: 0640
     directory_mode: 0755
+    owner: cassandra
+    group: cassandra
   when: 
     - cassandra_keystore_check_reg.stat.isdir is defined
     - cassandra_keystore_check_reg.stat.isdir
