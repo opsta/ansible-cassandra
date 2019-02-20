@@ -1,7 +1,13 @@
 ---
 # Defaults file for ansible-cassandra
-cassandra_rackdc_config_file_path: /etc/cassandra/cassandra-rackdc.properties
-cassandra_config_file_path: /etc/cassandra/cassandra.yaml
+cassandra_search_config_path: "{{ playbook_dir }}/files/groups/{{ item }}/conf"
+cassandra_search_config_paths: []
+
+cassandra_host_keystore_path: "{{ cassandra_host_keystore_file_path | default(inventory_hostname)}}/conf"
+
+cassandra_config_base_path: /etc/cassandra
+cassandra_rackdc_config_file_path: "{{ cassandra_config_base_path }}/cassandra-rackdc.properties"
+cassandra_config_file_path: "{{ cassandra_config_base_path }}/cassandra.yaml"
 
 #### Use in cassandra-rackdc.properties
 cassandra_dc: dc1
@@ -28,6 +34,18 @@ cassandra_authenticator: PasswordAuthenticator
 cassandra_authorizer: CassandraAuthorizer
 cassandra_hints_directory: /var/lib/cassandra/hints
 
+# Cassandra Seed Provider
+# Addresses of hosts that are deemed contact points.
+# Cassandra nodes use this list of hosts to find each other and learn
+# the topology of the ring.
+# Default seeds is generated from cassandra-seeds groups from inventory
+# seed_provider:
+#   - class_name: org.apache.cassandra.locator.simpleseedprovider
+#     parameters:
+#         # seeds is actually a comma-delimited list of addresses.
+#         # ex: "<ip1>,<ip2>,<ip3>"
+#         - seeds: "localhost"
+
 # If cassandra has more than one data directories
 # cassadnra_data_file_directories:
 #   - /var/lib/cassandra/data1
@@ -39,6 +57,60 @@ cassandra_commitlog_directory: /var/lib/cassandra/data/commitlog
 cassandra_saved_caches_directory: /var/lib/cassandra/data/saved_caches
 
 #### Optional
+# Encryption
+cassandra_native_transport_port_ssl: 9142
+
+# Cassandra server encryption option
+# The keystore and truststore.  For instructions on generating these files, see:
+# http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore
+cassandra_server_encryption_options:
+  internode_encryption: none
+  keystore: conf/.keystore
+  keystore_password: cassandra
+  truststore: conf/.truststore
+  truststore_password: cassandra
+  # More advanced defaults below:
+  # protocol: TLS
+  # algorithm: SunX509
+  # store_type: JKS
+  # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]
+  # require_client_auth: false
+  # require_endpoint_verification: false
+
+# Enable or disable client/server encryption.
+cassandra_client_encryption_options:
+  enabled: false
+  # if enabled and optional is set to true encrypted and unencrypted connections are handled.
+  optional: false
+  keystore: conf/.keystore
+  keystore_password: cassandra
+  # require_client_auth: false
+  # set trustore and truststore_password if require_client_auth is true
+  # truststore: conf/.truststore
+  # truststore_password: cassandra
+  # more advanced defaults below:
+  # protocol: tls
+  # algorithm: sunx509
+  # store_type: jks
+  # cipher_suites: [tls_rsa_with_aes_128_cbc_sha,tls_rsa_with_aes_256_cbc_sha,tls_dhe_rsa_with_aes_128_cbc_sha,tls_dhe_rsa_with_aes_256_cbc_sha,tls_ecdhe_rsa_with_aes_128_cbc_sha,tls_ecdhe_rsa_with_aes_256_cbc_sha]
+
+# Currently, only the following file types are supported for transparent data encryption, although
+# more are coming in future cassandra releases: commitlog, hints
+cassandra_transparent_data_encryption_options:
+  enabled: false
+  chunk_length_kb: 64
+  cipher: aes/cbc/pkcs5padding
+  key_alias: testing:1
+  # cbc iv length for aes needs to be 16 bytes (which is also the default size)
+  # iv_length: 16
+  key_provider: 
+    - class_name: org.apache.cassandra.security.jkskeyprovider
+      parameters: 
+        - keystore: conf/.keystore
+          keystore_password: cassandra
+          store_type: jceks
+          key_password: cassandra
+
 # Token & Permission/credential sync
 cassandra_allocate_tokens_for_keyspace: null
 cassandra_initial_token: null
@@ -102,6 +174,10 @@ cassandra_trickle_fsync: false
 cassandra_trickle_fsync_interval_in_kb: 10240
 
 ## Backup and I/O configuration
+# Default partitioner is Murmur3Partitioner, partitioners included for backwards
+# compatibility include RandomPartitioner, ByteOrderedPartitioner, and
+# OrderPreservingPartitioner.
+cassandra_partitioner: org.apache.cassandra.dht.Murmur3Partitioner
 cassandra_thrift_framed_transport_size_in_mb: 15
 cassandra_incremental_backups: false
 cassandra_snapshot_before_compaction: false
@@ -120,10 +196,18 @@ cassandra_cas_contention_timeout_in_ms: 1000
 cassandra_truncate_request_timeout_in_ms: 60000
 
 ## Communication of Cassandra
+# Broadcast Address is null (listen on same of a listen_address) and
+# listen_address is generated from default address from connection interface.
+cassandra_braodcast_address: null
+cassandra_listen_on_broadcast_address: false
 cassandra_storage_port: 7000
 cassandra_ssl_storage_port: 7001
 cassandra_start_native_transport: true
 cassandra_native_transport_port: 9042
+cassandra_native_transport_max_threads: 128
+cassandra_native_transport_max_frame_size_in_mb: 256
+cassandra_native_transport_max_concurrent_connections: -1
+cassandra_native_transport_max_concurrent_connections_per_ip: -1
 cassandra_start_rpc: false
 cassandra_rpc_port: 9160
 cassandra_rpc_keepalive: true
@@ -135,6 +219,30 @@ cassandra_cross_node_timeout: false
 cassandra_dynamic_snitch_update_interval_in_ms: 100
 cassandra_dynamic_snitch_reset_interval_in_ms: 600000
 cassandra_dynamic_snitch_badness_threshold: 0.1
+
+# RequestScheduler, which will schedule incoming client requests
+# according to the specific policy. This is useful for multi-tenancy
+# org.apache.cassandra.scheduler.NoScheduler
+# org.apache.cassandra.scheduler.RoundRobinScheduler
+cassandra_request_scheduler: org.apache.cassandra.scheduler.NoScheduler
+
+# When you set scheduler, you need to set scheduler option
+# Scheduler Options vary based on the type of scheduler
+# NoScheduler - Has no options
+# RoundRobin
+#  - throttle_limit
+#  - default_weight
+#  - weights
+#
+# cassandra_request_scheduler_options:
+#    throttle_limit: 80
+#    default_weight: 5
+#    weights:
+#      Keyspace1: 1
+#      Keyspace2: 5
+#
+# An indentifier based on which perform the request scheduling.
+# cassandra_request_scheduler_id: keyspace
 
 # Choose a internode compression (all, dc, none)
 cassandra_internode_compression: dc

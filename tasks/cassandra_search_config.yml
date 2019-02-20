@@ -1,0 +1,30 @@
+---
+- name: Set list of path to look for local Cassandra configuration directory
+  set_fact:
+    cassandra_search_config_paths: "{{ cassandra_search_config_paths }} + [ '{{ cassandra_search_config_path }}' ]"
+  with_items: "{{ group_names }}"
+
+- name: Check if cassandra configuration directory exists
+  stat:
+    path: "{{ item }}"
+  register: cassandra_config_check_reg
+  become: false
+  delegate_to: 127.0.0.1
+  with_first_found:
+    - files: "{{ cassandra_search_config_paths }}"
+      skip: true
+
+- name: Set cassandra configuration directory
+  set_fact:
+    cassandra_host_keystore_path: "{{ cassandra_config_check_reg.results[0].stat.path }}"
+  when:
+    - cassandra_config_check_reg.results[0] is defined
+    - cassandra_config_check_reg.results[0].stat is defined
+    - cassandra_config_check_reg.results[0].stat.isdir
+
+- name: Check if Cassandra keystore file is exists
+  stat:
+    path: "{{ cassandra_host_keystore_path }}"
+  become: false
+  delegate_to: 127.0.0.1
+  register: cassandra_keystore_check_reg
