@@ -933,8 +933,8 @@ request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 #    throttle_limit: 80
 #    default_weight: 5
 #    weights:
-#      keyspace1: 1
-#      keyspace2: 5
+#      Keyspace1: 1
+#      Keyspace2: 5
 {% if casssandra_request_scheduler_options is defined %}
 request_scheduler_options:
   {{ cassandra_request_scheduler_options | to_nice_yaml(indent=2) }}
