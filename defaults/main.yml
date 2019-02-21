@@ -199,7 +199,7 @@ cassandra_truncate_request_timeout_in_ms: 60000
 ## Communication of Cassandra
 # Broadcast Address is null (listen on same of a listen_address) and
 # listen_address is generated from default address from connection interface.
-#cassandra_broadcast_address: null
+# cassandra_broadcast_address: null
 cassandra_listen_on_broadcast_address: false
 cassandra_storage_port: 7000
 cassandra_ssl_storage_port: 7001
