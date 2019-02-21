@@ -402,7 +402,7 @@ seed_provider:
   # cassandra nodes use this list of hosts to find each other and learn
   # the topology of the ring.  you must change this if you are running
   # multiple nodes!
-  - class_name: org.apache.cassandra.locator.simpleseedprovider
+  - class_name: org.apache.cassandra.locator.SimpleSeedProvider
     parameters:
       # seeds is actually a comma-delimited list of addresses.
       # ex: "<ip1>,<ip2>,<ip3>"
@@ -562,7 +562,9 @@ listen_address: {{ ansible_default_ipv4.address }}
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
 # broadcast_address: 1.2.3.4
+{% if cassandra_braodcast_address is defined %}
 braodcast_address: {{ cassandra_braodcast_address }}
+{% endif %}
 
 # When using multiple physical network interfaces, set this
 # to true to listen on broadcast_address in addition to
@@ -594,7 +596,9 @@ native_transport_port: {{ cassandra_native_transport_port }}
 # from native_transport_port will use encryption for native_transport_port_ssl while
 # keeping native_transport_port unencrypted.
 # native_transport_port_ssl: 9142
+{% if cassandra_native_transport_port_ssl is defined %}
 native_transport_port_ssl: {{ cassandra_native_transport_port_ssl }}
+{% endif %}
 
 # The maximum threads for handling requests when the native transport is used.
 # This is similar to rpc_max_threads though the default differs slightly (and

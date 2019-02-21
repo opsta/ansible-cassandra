@@ -40,7 +40,7 @@ cassandra_hints_directory: /var/lib/cassandra/hints
 # the topology of the ring.
 # Default seeds is generated from cassandra-seeds groups from inventory
 # seed_provider:
-#   - class_name: org.apache.cassandra.locator.simpleseedprovider
+#   - class_name: org.apache.cassandra.locator.SimpleSeedProvider
 #     parameters:
 #         # seeds is actually a comma-delimited list of addresses.
 #         # ex: "<ip1>,<ip2>,<ip3>"
@@ -57,9 +57,6 @@ cassandra_commitlog_directory: /var/lib/cassandra/data/commitlog
 cassandra_saved_caches_directory: /var/lib/cassandra/data/saved_caches
 
 #### Optional
-# Encryption
-cassandra_native_transport_port_ssl: 9142
-
 # Cassandra server encryption option
 # The keystore and truststore.  For instructions on generating these files, see:
 # http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore
@@ -110,6 +107,10 @@ cassandra_transparent_data_encryption_options:
           keystore_password: cassandra
           store_type: jceks
           key_password: cassandra
+
+# Encryption
+# cassandra_native_transport will be used when enable encryption method
+# cassandra_native_transport_port_ssl: 9142
 
 # Token & Permission/credential sync
 cassandra_allocate_tokens_for_keyspace: null
@@ -198,7 +199,7 @@ cassandra_truncate_request_timeout_in_ms: 60000
 ## Communication of Cassandra
 # Broadcast Address is null (listen on same of a listen_address) and
 # listen_address is generated from default address from connection interface.
-cassandra_braodcast_address: null
+#cassandra_broadcast_address: null
 cassandra_listen_on_broadcast_address: false
 cassandra_storage_port: 7000
 cassandra_ssl_storage_port: 7001
