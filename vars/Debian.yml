@@ -1,4 +1,4 @@
-apt_repository: deb http://www.apache.org/dist/cassandra/debian 311x main
+apt_repository: deb http://www.apache.org/dist/cassandra/debian 37x main
 apt_key_url: https://www.apache.org/dist/cassandra/KEYS
 
 cassandra_packages: cassandra
