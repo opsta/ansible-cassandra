@@ -9,6 +9,12 @@ cassandra_config_base_path: /etc/cassandra
 cassandra_rackdc_config_file_path: "{{ cassandra_config_base_path }}/cassandra-rackdc.properties"
 cassandra_config_file_path: "{{ cassandra_config_base_path }}/cassandra.yaml"
 
+# If you install cassandra under version 3.9,
+# Need set bashrc for cqlsh to use cassandra-driver
+# More information: https://issues.apache.org/jira/browse/CASSANDRA-11850
+cassandra_bashrc_file_paths:
+  - /home/ubuntu/.bashrc
+
 #### Use in cassandra-rackdc.properties
 cassandra_dc: dc1
 cassandra_rack: rack1
