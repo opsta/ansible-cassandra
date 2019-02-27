@@ -4,7 +4,8 @@
   register: cassandra_version_reg
 
 # Fix cqlsh
-- include_tasks: cassandra_fix_cqlsh.yml
+- name: Fix cqlsh when version of Cassandra less than 3.9
+  include_tasks: cassandra_fix_cqlsh.yml
   when: cassandra_version_reg.stdout|int < 3.9
 
 - name: Copy Keystore files to Cassandra
