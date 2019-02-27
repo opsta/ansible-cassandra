@@ -8,27 +8,3 @@
     repo: "{{ apt_repository }}" 
     state: present
     filename: apache-cassandra
-
-# Fix cqlsh for Canssandra version <= 3.9
-- name: Install python setuptools
-  apt:
-    name: "{{ item }}"
-    state: present
-    update_cache: yes
-  with_items:
-    - python-setuptools
-    - python-pip
-
-# Fix cqlsh for Canssandra version <= 3.9
-- name: Install python cassandra driver for cqlsh
-  pip:
-    name: cassandra-driver
-
-# Fix cqlsh for Canssandra version <= 3.9
-- name: Export bashrc for cqlsh
-  lineinfile:
-    line: export CQLSH_NO_BUNDLED=TRUE
-    path: "{{ item }}"
-    state: present
-  with_items:
-    - "{{ cassandra_bashrc_file_paths }}"

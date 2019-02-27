@@ -1,3 +1,12 @@
+---
+- name: Detect version of Cassandra
+  shell: "apt list --installed | grep cassandra  | awk '{print $2}'"
+  register: cassandra_version_reg
+
+# Fix cqlsh
+- include_tasks: cassandra_fix_cqlsh.yml
+  when: cassandra_version_reg.stdout|int < 3.9
+
 - name: Copy Keystore files to Cassandra
   copy:
     src: "{{ cassandra_host_keystore_path }}"
