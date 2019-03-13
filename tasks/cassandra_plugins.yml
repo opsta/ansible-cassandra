@@ -1,0 +1,20 @@
+---
+- name: Download Jolokia source binary
+  get_url:
+    url: "{{ cassandra_jolokia2_plugins.source }}"
+    dest: "{{ cassadnra_lib_file_path }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Append Cassandra env for apply Jolikia library
+  lineinfile:
+    dest: "{{ cassadnra_config_lib_path }}"
+    line: JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jolokia-jvm-{{ cassandra_jolokia2_plugins.version }}-agent.jar=port={{ cassandra_jolokia2_plugins.listen_port }},host={{ cassandra_jolokia2_plugins.listen_host }}"
+    insertafter: BOF
+    state: present
+
+- name: Restart Cassandra service
+  service:
+    name: "{{ cassandra_service_name }}"
+    state: restarted

@@ -8,5 +8,6 @@
   
 - block:
   - include_tasks: cassandra_search_config.yml
-  - include_tasks: cassandra_post.yml
+  - import_tasks: cassandra_post.yml
   tags: cassandra-config
+  

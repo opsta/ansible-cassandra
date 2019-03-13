@@ -9,6 +9,15 @@ cassandra_config_base_path: /etc/cassandra
 cassandra_rackdc_config_file_path: "{{ cassandra_config_base_path }}/cassandra-rackdc.properties"
 cassandra_config_file_path: "{{ cassandra_config_base_path }}/cassandra.yaml"
 
+cassadnra_lib_file_path: "/usr/share/cassandra/lib/"
+cassadnra_config_lib_path: "/etc/cassandra/cassandra-env.sh"
+
+cassandra_jolokia2_plugins:
+  version: 1.6.0
+  source: "http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/{{ cassandra_jolokia2_plugins.version }}/jolokia-jvm-{{ cassandra_jolokia2_plugins.version }}-agent.jar"
+  listen_host: 0.0.0.0
+  listten_port: 8778
+
 # If you install cassandra less than version 3.9,
 # Need set bashrc for cqlsh to use cassandra-driver
 # More information: https://issues.apache.org/jira/browse/CASSANDRA-11850
