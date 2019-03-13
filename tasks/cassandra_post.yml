@@ -107,9 +107,3 @@
     debug: 
      msg: "{{ nodestat_reg.stdout.split('\n') }}"
   tags: cassandra-config
-
-- block:
-  - name: Install Jokolia2 metric
-    include_tasks: cassandra_plugins.yml
-  tags: test
-  when: cassandra_jolokia2_plugins
