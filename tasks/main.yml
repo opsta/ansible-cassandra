@@ -4,7 +4,7 @@
   include_vars: "{{ ansible_os_family }}.yml"
 
 - include_tasks: cassandra_pre.yml
-- import_tasks: cassandra_install.yml
+- include_tasks: cassandra_install.yml
 
 - block:
   - include_tasks: cassandra_search_config.yml
