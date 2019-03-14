@@ -8,11 +8,14 @@
     mode: 0644
   notify: Restart cassandra service
 
-- name: Append Cassandra env for apply Jolikia library
+- name: Set jolokia option to JVM_OPTS
+  set_fact: 
+    cassandra_jvm_opts: "{{ cassandra_jvm_opts }} -javaagent:$CASSANDRA_HOME/lib/jolokia-jvm-{{ cassandra_jolokia2_plugins.version }}-agent.jar=port={{ cassandra_jolokia2_plugins.listen_port }},host={{ cassandra_jolokia2_plugins.listen_host }}"
+
+- name: Append JVM_OPTS to Cassandra
   lineinfile:
     dest: "{{ cassandra_env_config_file_path }}"
-    regexp: '^JVM_OPTS'
-    insertafter: EOF
-    line: JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS -javaagent:$CASSANDRA_HOME/lib/jolokia-jvm-{{ cassandra_jolokia2_plugins.version }}-agent.jar=port={{ cassandra_jolokia2_plugins.listen_port }},host={{ cassandra_jolokia2_plugins.listen_host }}"
+    regexp: '^JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS'
+    line: JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS {{ cassandra_jvm_opts }}"
     state: present
   notify: Restart cassandra service
