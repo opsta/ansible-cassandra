@@ -1,0 +1,5 @@
+---
+- name: Restart cassandra service
+  systemd:
+    name: "{{ cassandra_service_name }}"
+    state: restarted

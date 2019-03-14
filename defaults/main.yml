@@ -5,9 +5,28 @@ cassandra_search_config_paths: []
 
 cassandra_host_keystore_path: "{{ cassandra_host_keystore_file_path | default(inventory_hostname)}}/conf"
 
+# cassandra_jvm_opt is used for custom Java Option to run cassandra.
+# JVM_OPTS should be defined in one line string.
+cassandra_jvm_opts: ""
+
 cassandra_config_base_path: /etc/cassandra
+cassandra_lib_path: /usr/share/cassandra/lib
+cassandra_env_config_file_path: "{{ cassandra_config_base_path }}/cassandra-env.sh"
 cassandra_rackdc_config_file_path: "{{ cassandra_config_base_path }}/cassandra-rackdc.properties"
 cassandra_config_file_path: "{{ cassandra_config_base_path }}/cassandra.yaml"
+
+# Jolokia monitoring plugin for cassandra
+# https://jolokia.org
+# List of jolokia's version
+# http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm
+cassandra_jolokia2_plugins:
+  enabled: true
+  version: 1.6.0
+  listen_host: 0.0.0.0
+  listen_port: 8778
+
+# URL for download jolokia lib
+cassandra_jolokia2_url: "http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/{{ cassandra_jolokia2_plugins.version }}/jolokia-jvm-{{ cassandra_jolokia2_plugins.version }}-agent.jar"
 
 # If you install cassandra less than version 3.9,
 # Need set bashrc for cqlsh to use cassandra-driver
@@ -28,7 +47,7 @@ cassandra_rpc_address: 0.0.0.0
 cassandra_num_tokens: 256
 
 # Choose you endpoint_snitch for Cassandra via following options.
-#   IEndpointSnitch, SimpleSnitch, GossipingPropertyFileSnitch, 
+#   IEndpointSnitch, SimpleSnitch, GossipingPropertyFileSnitch,
 #   PropertyFileSnitch, Ec2Snitch, Ec2MultiRegionSnitch, RackInferringSnitch
 cassandra_endpoint_snitch: GossipingPropertyFileSnitch
 
@@ -106,9 +125,9 @@ cassandra_transparent_data_encryption_options:
   key_alias: testing:1
   # cbc iv length for aes needs to be 16 bytes (which is also the default size)
   # iv_length: 16
-  key_provider: 
+  key_provider:
     - class_name: org.apache.cassandra.security.jkskeyprovider
-      parameters: 
+      parameters:
         - keystore: conf/.keystore
           keystore_password: cassandra
           store_type: jceks
@@ -194,6 +213,7 @@ cassandra_column_index_cache_size_in_kb: 2
 cassandra_concurrent_compactors: null
 cassandra_compaction_throughput_mb_per_sec: 16
 cassandra_sstable_preemptive_open_interval_in_mb: 50
+cassandra_stream_throughput_outbound_megabits_per_sec: 200
 cassandra_inter_dc_stream_throughput_outbound_megabits_per_sec: 200
 cassandra_read_request_timeout_in_ms: 5000
 cassandra_range_request_timeout_in_ms: 10000

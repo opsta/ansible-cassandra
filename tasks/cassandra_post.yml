@@ -82,6 +82,9 @@
         cassandra_init_config_reg is changed
   tags: cassandra-config
 
+- name: Restart Cassandra service for loading Jolokia
+  meta: flush_handlers
+
 - name: Start Cassandra service
   systemd:
     name: "{{ cassandra_service_name }}"

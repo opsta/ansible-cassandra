@@ -5,7 +5,7 @@
 
 - include_tasks: cassandra_pre.yml
 - include_tasks: cassandra_install.yml
-  
+
 - block:
   - include_tasks: cassandra_search_config.yml
   - include_tasks: cassandra_post.yml
