@@ -6,4 +6,4 @@
 
 - name: Install Jokolia2 metric
   include_tasks: cassandra_plugins.yml
-  when: cassandra_jolokia2_plugins.enabled == true
+  when: cassandra_jolokia2_plugins.enabled

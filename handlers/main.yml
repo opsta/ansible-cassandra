@@ -3,5 +3,3 @@
   systemd:
     name: "{{ cassandra_service_name }}"
     state: restarted
-  when: not cassandra_rackdc_init_config_reg is changed or
-        not cassandra_init_config_reg is changed
